@@ -85,3 +85,20 @@ tkn taskrun ls
 NAME               STARTED   DURATION   STATUS
 init-gitea-qvnd7   now       15s        Succeeded
 ```
+
+## Trigger Templates
+
+TriggerTemplate is responsible to create the Tekton Resources when it receives the Event from the EventListener.
+
+```bash
+oc create -f templates/trigger-templates.yaml
+```
+
+You should see the templates.
+
+```bash
+tkn tt ls
+NAME                               AGE
+vote-api-trigger-template   now
+vote-ui-trigger-template    now
+```
