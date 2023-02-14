@@ -1,0 +1,89 @@
+apiVersion: tekton.dev/v1beta1
+kind: TaskRun
+metadata:
+  generateName: create-gitea-webhooks-
+spec:
+  serviceAccountName: pipeline
+  taskSpec:
+    params:
+      - name: GITEA_USER
+        type: string
+        description: Gitea admin username
+        default: gitea
+      - name: GITEA_PASSWORD
+        type: string
+        description: Gitea admin password
+        default: gitea
+      - name: GITEA_VOTE_API_REPO_NAME
+        type: string
+        description: The Gitea vote api repo where to add to the webhooks
+        default: "pipelines-vote-api"
+      - name: VOTE_API_WEBHOOK_HOST
+        type: string
+        description: The hostname of the webhook to be triggered by the vote api repo
+        default: "el-gitea-webhook-vote-api-vote-app.apps-crc.testing"
+      - name: GITEA_VOTE_UI_REPO_NAME
+        type: string
+        description: The Gitea vote ui repo where to add to the webhooks
+        default: "pipelines-vote-ui"
+      - name: VOTE_UI_WEBHOOK_HOST
+        type: string
+        description: The hostname of the webhook to be triggered by the vote ui repo
+        default: "el-gitea-webhook-vote-ui-vote-app.apps-crc.testing"
+    stepTemplate:
+      env:
+        - name: NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+    steps:
+      - name: create-gitea-webhook-vote-api
+        image: quay.io/siamaksade/python-oc
+        script: |
+          #!/usr/bin/env python3
+
+          import os
+          import requests
+
+          gitea_user = "$(params.GITEA_USER)"
+          gitea_pwd = "$(params.GITEA_PASSWORD)"
+          webhookURL = "http://$(params.VOTE_API_WEBHOOK_HOST)/"
+          giteaURL = "http://" + gitea_user + ":" + gitea_pwd + "@" +os.popen('oc get svc gitea -o template --template="{{.spec.clusterIP}}"').read() + ":3000"
+
+          # configure webhook on repo
+          data_webhook = '{"type": "gogs", "config": { "url": "' + webhookURL + '", "content_type": "json"}, "events": ["push"], "active": true}'
+          headers = {'Content-Type': 'application/json'}
+          resp = requests.post(url = giteaURL + "/api/v1/repos/" + gitea_user + "/$(params.GITEA_VOTE_API_REPO_NAME)/hooks",
+                              headers = headers,
+                              data = data_webhook)
+
+          if resp.status_code != 200 and resp.status_code != 201:
+            print("Error configuring the webhook (status code: {})".format(resp.status_code))
+            print(resp.content)
+          else:
+            print("Configured webhook: " + webhookURL)
+      - name: create-gitea-webhook-vote-ui
+        image: quay.io/siamaksade/python-oc
+        script: |
+          #!/usr/bin/env python3
+
+          import os
+          import requests
+
+          gitea_user = "$(params.GITEA_USER)"
+          gitea_pwd = "$(params.GITEA_PASSWORD)"
+          webhookURL = "http://$(params.VOTE_UI_WEBHOOK_HOST)/"
+          giteaURL = "http://" + gitea_user + ":" + gitea_pwd + "@" +os.popen('oc get svc gitea -o template --template="{{.spec.clusterIP}}"').read() + ":3000"
+
+          # configure webhook on repo
+          data_webhook = '{"type": "gogs", "config": { "url": "' + webhookURL + '", "content_type": "json"}, "events": ["push"], "active": true}'
+          headers = {'Content-Type': 'application/json'}
+          resp = requests.post(url = giteaURL + "/api/v1/repos/" + gitea_user + "/$(params.GITEA_VOTE_UI_REPO_NAME)/hooks",
+                              headers = headers,
+                              data = data_webhook)
+
+          if resp.status_code != 200 and resp.status_code != 201:
+            print("Error configuring the webhook (status code: {})".format(resp.status_code))
+            print(resp.content)
+          else:
+            print("Configured webhook: " + webhookURL)

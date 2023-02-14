@@ -140,3 +140,43 @@ NAME                     AGE   URL                                              
 gitea-webhook-vote-api   now   http://el-gitea-webhook-vote-api.vote-api.svc.cluster.local:8080   True
 gitea-webhook-vote-ui    now   http://el-gitea-webhook-vote-ui.vote-api.svc.cluster.local:8080    True
 ```
+
+## Webhook
+
+You can create the webhook manually via the Gitea UI or use the webhook task run.
+
+```bash
+oc create -f templates/gitea-webhook-task-run.yaml
+```
+
+View task run logs.
+
+```bash
+tkn tr logs -f -a $(tkn tr ls | awk 'NR==2{print $1}')
+```
+
+## Triggers in Action
+
+If you have `watch` installed open a new terminal and watch the pipelines run.
+
+```bash
+watch tkn pr ls
+```
+
+Clone and edit the source and push the changes.
+
+```bash
+git clone http://gitea-vote-app.apps-crc.testing/gitea/pipelines-vote-ui.git
+git clone http://gitea-vote-app.apps-crc.testing/gitea/pipelines-vote-api.git
+```
+
+Make a change, commit and push the changes. A pipeline run should be triggered.
+
+```bash
+Every 2.0s: tkn pr  ls
+
+NAME                                 STARTED      DURATION   STATUS
+build-and-deploy-vote-ui-app-bzq5v   now          1m41s      Succeeded
+```
+
+You can also checkout the pipeline run in the Openshift console.
