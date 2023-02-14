@@ -43,3 +43,17 @@ NAME                   DESCRIPTION   AGE
 apply-manifests                      now
 update-deployment                    now
 ```
+
+## Create Pipeline
+
+```bash
+oc create -f templates/pipeline.yaml
+```
+
+You should see the pipeline.
+
+```bash
+tkn pipeline ls
+NAME               AGE   LAST RUN   STARTED   DURATION   STATUS
+build-and-deploy   now   -          -         -          -
+```
