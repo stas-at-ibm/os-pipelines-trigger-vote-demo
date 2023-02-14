@@ -26,3 +26,20 @@ Used to share data between pipeline tasks.
 ```bash
 oc apply -f templates/source-pvc.yaml
 ```
+
+## Create Tasks
+
+The pipeline will use two custom tasks and two build in tasks. The custom tasks are `apply-manifests` and `update-deployment`.
+
+```bash
+oc create -f templates/tasks.yaml
+```
+
+You should see the tasks.
+
+```bash
+tkn tasks ls
+NAME                   DESCRIPTION   AGE
+apply-manifests                      now
+update-deployment                    now
+```
