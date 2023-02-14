@@ -102,3 +102,24 @@ NAME                               AGE
 vote-api-trigger-template   now
 vote-ui-trigger-template    now
 ```
+
+## Trigger Binding
+
+TriggerBinding is responsible to bind the Event payload with Template Parameters. We will use two attributes from the event payload:
+
+- `after`: the commit hash after our push is merged into the master
+- `repository.clone_url`: The Git repo clone url
+
+Values can be retrieved using JSONPath expressions.
+
+```bash
+oc create -f templates/trigger-binding.yaml
+```
+
+You should see the trigger binding.
+
+```bash
+tkn tb ls
+NAME                             AGE
+gitea-vote-app-trigger-binding   now
+```
