@@ -1,0 +1,26 @@
+---
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: EventListener
+metadata:
+  name: gitea-webhook-vote-api
+spec:
+  serviceAccountName: pipeline
+  triggers:
+    - name: webhook-vote-api
+      bindings:
+        - ref: gitea-vote-app-trigger-binding
+      template:
+        ref: vote-api-trigger-template
+---
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: EventListener
+metadata:
+  name: gitea-webhook-vote-ui
+spec:
+  serviceAccountName: pipeline
+  triggers:
+    - name: webhook-vote-ui
+      bindings:
+        - ref: gitea-vote-app-trigger-binding
+      template:
+        ref: vote-ui-trigger-template

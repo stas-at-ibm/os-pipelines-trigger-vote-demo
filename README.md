@@ -123,3 +123,20 @@ tkn tb ls
 NAME                             AGE
 gitea-vote-app-trigger-binding   now
 ```
+
+## Event Listener
+
+Event Listener is primary interace for external sources to send events, that will trigger the creation of Tekton resources defined as part of the TriggerTemplate. Webhooks from Gitea will send their events to this resource.
+
+```bash
+oc create -f templates/event-listeners.yaml
+```
+
+You should see the event listeners.
+
+```bash
+tkn el ls
+NAME                     AGE   URL                                                                AVAILABLE
+gitea-webhook-vote-api   now   http://el-gitea-webhook-vote-api.vote-api.svc.cluster.local:8080   True
+gitea-webhook-vote-ui    now   http://el-gitea-webhook-vote-ui.vote-api.svc.cluster.local:8080    True
+```
