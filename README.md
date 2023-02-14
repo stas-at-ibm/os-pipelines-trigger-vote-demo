@@ -57,3 +57,31 @@ tkn pipeline ls
 NAME               AGE   LAST RUN   STARTED   DURATION   STATUS
 build-and-deploy   now   -          -         -          -
 ```
+
+## Init Source Repository
+
+This step is optional and can be done by other means. For the all following steps and the pipeline triggers you will need:
+
+- a Gitea user named `gitea`
+- a vote-ui gitea repository
+- a vote-api gitea repository
+
+This steps can be executed automatically via:
+
+```bash
+oc create -f templates/gitea-init-task-run.yaml
+```
+
+Follow the logs.
+
+```bash
+tkn tr logs -f -a $(tkn tr ls -n vote-app | awk 'NR==2{print $1}')
+```
+
+You should see the task run.
+
+```bash
+tkn taskrun ls
+NAME               STARTED   DURATION   STATUS
+init-gitea-qvnd7   now       15s        Succeeded
+```
