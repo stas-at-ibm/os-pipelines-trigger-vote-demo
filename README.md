@@ -88,7 +88,7 @@ init-gitea-qvnd7   now       15s        Succeeded
 
 ## Trigger Templates
 
-TriggerTemplate is responsible to create the Tekton Resources when it receives the Event from the EventListener.
+Trigger template generates Tekton resources in response to events from the event listener.
 
 ```bash
 oc create -f templates/trigger-templates.yaml
@@ -105,10 +105,10 @@ vote-ui-trigger-template    now
 
 ## Trigger Binding
 
-TriggerBinding is responsible to bind the Event payload with Template Parameters. We will use two attributes from the event payload:
+Trigger binding binds attributes from the event payload with parameters in the trigger template. We will use two attributes from the event payload:
 
-- `after`: the commit hash after our push is merged into the master
-- `repository.clone_url`: The Git repo clone url
+- `after`: commit hash of the latest pushed commit
+- `repository.clone_url`: Git repo clone url
 
 Values can be retrieved using JSONPath expressions.
 
@@ -126,7 +126,7 @@ gitea-vote-app-trigger-binding   now
 
 ## Event Listener
 
-Event Listener is primary interace for external sources to send events, that will trigger the creation of Tekton resources defined as part of the TriggerTemplate. Webhooks from Gitea will send their events to this resource.
+Event listener is an inteface which recieves external events. When an event is recieved it will trigger the creation of Tekton resources like pipelines depending on how they are defined in the trigger template. Webhooks from Gitea will send their events to this resource.
 
 ```bash
 oc create -f templates/event-listeners.yaml
