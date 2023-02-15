@@ -2,9 +2,9 @@
 
 ## Prerequisites
 
-- Openshift 4.11+
+- [OpenShift Local](https://developers.redhat.com/products/openshift-local/getting-started) (4.11+)
 - Openshift Red Hat Pipeline Operator
-- Tekton CLI
+- [Tekton CLI](https://github.com/tektoncd/cli)
 - Gitea Github Service
 
 ## Pipeline Diagram
@@ -180,3 +180,7 @@ build-and-deploy-vote-ui-app-bzq5v   now          1m41s      Succeeded
 ```
 
 You can also checkout the pipeline run in the Openshift console.
+
+## Resources
+
+- [Red Hat Tektop Tutorial](https://redhat-scholars.github.io/tekton-tutorial/tekton-tutorial/index.html)
