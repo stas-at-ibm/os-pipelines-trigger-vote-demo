@@ -143,7 +143,7 @@ gitea-webhook-vote-ui    now   http://el-gitea-webhook-vote-ui.vote-api.svc.clus
 
 ## Webhook
 
-You can create the webhook manually via the Gitea UI or use the webhook task run.
+You can create the webhook manually via the Gitea UI or use the webhook task run. The task run assumes that the Gitea server and k8 service are running in the `vote-app` project/namespace.
 
 ```bash
 oc create -f templates/gitea-webhook-task-run.yaml
