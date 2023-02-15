@@ -184,3 +184,4 @@ You can also checkout the pipeline run in the Openshift console.
 ## Resources
 
 - [Red Hat Tektop Tutorial](https://redhat-scholars.github.io/tekton-tutorial/tekton-tutorial/index.html)
+- [Getting started with Openshift Pipelines](https://developers.redhat.com/learning/learn:openshift:develop-gitops/resource/resources:getting-started-openshift-pipelines)
