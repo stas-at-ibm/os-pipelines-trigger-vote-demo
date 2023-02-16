@@ -1,0 +1,10 @@
+namespace: vote-app
+commonLabels:
+  demo: os-pipelines-trigger-vote-demo
+resources:
+  - templates/source-pvc.yaml
+  - templates/tasks.yaml
+  - templates/pipeline.yaml
+  - templates/trigger-templates.yaml
+  - templates/trigger-binding.yaml
+  - templates/event-listeners.yaml
