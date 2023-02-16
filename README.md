@@ -19,6 +19,48 @@ oc new-project vote-app
 
 Every resource should be created in the `vote-app` project.
 
+## Init Source Repository
+
+This step is optional and can be done by other means. For the pipeline triggers to work you will need:
+
+- a Gitea user named `gitea`
+- a vote-ui gitea repository
+- a vote-api gitea repository
+
+If you followed the guide to setup Gitea entirely you should have the user `gitea`. Cloning the repo can be done via a task run.
+
+```bash
+oc create -f templates/clone-vote-app-task-run.yaml
+```
+
+Follow the logs.
+
+```bash
+tkn tr logs -f -a $(tkn tr ls -n vote-app | awk 'NR==2{print $1}')
+```
+
+You should see the task run.
+
+```bash
+tkn taskrun ls
+NAME                   STARTED   DURATION   STATUS
+clone-vote-app-qvnd7   now       15s        Succeeded
+```
+
+## Quick Setup
+
+If you want to setup all resources in on step then use the command below and then go to the [Webhook](#webhook) step. If you want to setup every resource step by step then ignore the command below and start from [Create PVC](#create-pvc).
+
+```bash
+oc create -k kustomization.yaml
+```
+
+Delete.
+
+```bash
+oc delete -k kustomization.yaml
+```
+
 ## Create PVC
 
 Used to share data between pipeline tasks.
@@ -56,34 +98,6 @@ You should see the pipeline.
 tkn pipeline ls
 NAME               AGE   LAST RUN   STARTED   DURATION   STATUS
 build-and-deploy   now   -          -         -          -
-```
-
-## Init Source Repository
-
-This step is optional and can be done by other means. For the all following steps and the pipeline triggers you will need:
-
-- a Gitea user named `gitea`
-- a vote-ui gitea repository
-- a vote-api gitea repository
-
-This steps can be executed automatically via:
-
-```bash
-oc create -f templates/gitea-init-task-run.yaml
-```
-
-Follow the logs.
-
-```bash
-tkn tr logs -f -a $(tkn tr ls -n vote-app | awk 'NR==2{print $1}')
-```
-
-You should see the task run.
-
-```bash
-tkn taskrun ls
-NAME               STARTED   DURATION   STATUS
-init-gitea-qvnd7   now       15s        Succeeded
 ```
 
 ## Trigger Templates
