@@ -30,7 +30,7 @@ This step is optional and can be done by other means. For the pipeline triggers 
 If you followed the guide to setup Gitea entirely you should have the user `gitea`. Cloning the repo can be done via a task run.
 
 ```bash
-oc create -f templates/clone-vote-app-task-run.yaml
+sed "s#@GITEA_SERVER_CLUSTER_IP@#$(oc -n gitea-git-server get svc gitea -o template --template='{{.spec.clusterIP}}')#g" templates/clone-vote-app-task-run.yaml | oc create -f -
 ```
 
 Follow the logs.
@@ -112,7 +112,7 @@ You should see the templates.
 
 ```bash
 tkn tt ls
-NAME                               AGE
+NAME                        AGE
 vote-api-trigger-template   now
 vote-ui-trigger-template    now
 ```
@@ -157,10 +157,10 @@ gitea-webhook-vote-ui    now   http://el-gitea-webhook-vote-ui.vote-api.svc.clus
 
 ## Webhook
 
-You can create the webhook manually via the Gitea UI or use the webhook task run. The task run assumes that the Gitea server and k8 service are running in the `vote-app` project/namespace.
+You can create the webhook manually via the Gitea UI or use the webhook task run. The task run assumes that the Gitea server and k8 service are running in the `gitea-git-server` project/namespace.
 
 ```bash
-oc create -f templates/gitea-webhook-task-run.yaml
+sed "s#@GITEA_SERVER_CLUSTER_IP@#$(oc -n gitea-git-server get svc gitea -o template --template='{{.spec.clusterIP}}')#g" templates/gitea-webhook-task-run.yaml | oc create -f -
 ```
 
 View task run logs.

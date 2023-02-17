@@ -14,10 +14,10 @@ spec:
         type: string
         description: Gitea admin password
         default: gitea
-      - name: GITEA_SERVER_NAMESPACE
+      - name: GITEA_SERVER_CLUSTER_IP
         type: string
-        description: Namespace where the gitea git server is running, please change if needed
-        default: gitea-git-server
+        description: Get the cluster ip by running 'oc -n gitea-git-server get svc gitea -o template --template="{{.spec.clusterIP}}"'
+        default: "@GITEA_SERVER_CLUSTER_IP@"
       - name: REPO_URL_API
         type: string
         description: The GitHub Repository to use
@@ -44,7 +44,7 @@ spec:
 
           gitea_user = "$(params.GITEA_USER)"
           gitea_pass = "$(params.GITEA_PASSWORD)"
-          giteaURL = "http://" + gitea_user + ":" + gitea_pass + "@"+ os.popen('oc -n "$(params.GITEA_SERVER_NAMESPACE)" get svc gitea  -o template --template="{{.spec.clusterIP}}"').read() + ":3000"
+          giteaURL = "http://" + gitea_user + ":" + gitea_pwd + "@$(params.GITEA_SERVER_CLUSTER_IP):3000"
 
           # debugging
           # print("Gitea service url is: " + giteaURL )

@@ -14,10 +14,10 @@ spec:
         type: string
         description: Gitea admin password
         default: gitea
-      - name: GITEA_SERVER_NAMESPACE
+      - name: GITEA_SERVER_CLUSTER_IP
         type: string
-        description: Namespace where the gitea git server is running, please change if needed
-        default: gitea-git-server
+        description: Get the cluster ip by running 'oc -n gitea-git-server get svc gitea -o template --template="{{.spec.clusterIP}}"'
+        default: "@GITEA_SERVER_CLUSTER_IP@"
       - name: GITEA_VOTE_API_REPO_NAME
         type: string
         description: The Gitea vote api repo where to add to the webhooks
@@ -52,7 +52,10 @@ spec:
           gitea_user = "$(params.GITEA_USER)"
           gitea_pwd = "$(params.GITEA_PASSWORD)"
           webhookURL = "http://$(params.VOTE_API_WEBHOOK_HOST)/"
-          giteaURL = "http://" + gitea_user + ":" + gitea_pwd + "@" +os.popen('oc -n "$(params.GITEA_SERVER_NAMESPACE)" get svc gitea -o template --template="{{.spec.clusterIP}}"').read() + ":3000"
+          giteaURL = "http://" + gitea_user + ":" + gitea_pwd + "@$(params.GITEA_SERVER_CLUSTER_IP):3000"
+
+          # debugging
+          # print("Gitea service url is: " + giteaURL )
 
           # configure webhook on repo
           data_webhook = '{"type": "gogs", "config": { "url": "' + webhookURL + '", "content_type": "json"}, "events": ["push"], "active": true}'
@@ -77,7 +80,7 @@ spec:
           gitea_user = "$(params.GITEA_USER)"
           gitea_pwd = "$(params.GITEA_PASSWORD)"
           webhookURL = "http://$(params.VOTE_UI_WEBHOOK_HOST)/"
-          giteaURL = "http://" + gitea_user + ":" + gitea_pwd + "@" +os.popen('oc -n "$(params.GITEA_SERVER_NAMESPACE)" get svc gitea -o template --template="{{.spec.clusterIP}}"').read() + ":3000"
+          giteaURL = "http://" + gitea_user + ":" + gitea_pwd + "@$(params.GITEA_SERVER_CLUSTER_IP):3000"
 
           # configure webhook on repo
           data_webhook = '{"type": "gogs", "config": { "url": "' + webhookURL + '", "content_type": "json"}, "events": ["push"], "active": true}'
