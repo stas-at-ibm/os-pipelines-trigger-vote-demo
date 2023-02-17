@@ -5,7 +5,7 @@
 - [OpenShift Local](https://developers.redhat.com/products/openshift-local/getting-started) (4.11+)
 - Openshift Red Hat Pipeline Operator
 - [Tekton CLI](https://github.com/tektoncd/cli)
-- Gitea Github Service
+- [Gitea Github Service](https://github.com/stas-at-ibm/os-gitea-template)
 
 ## Pipeline Diagram
 
@@ -20,6 +20,8 @@ oc new-project vote-app
 Every resource should be created in the `vote-app` project.
 
 ## Init Source Repository
+
+You can find a guide on how to set up a Gitea Git Server on Openshift here: [link](https://github.com/stas-at-ibm/os-gitea-template).
 
 This step is optional and can be done by other means. For the pipeline triggers to work you will need:
 
